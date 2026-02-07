@@ -1,0 +1,133 @@
+user@rgukt:~$ cd ~/security-log-analyzer
+bash: cd: /home/user/security-log-analyzer: No such file or directory
+user@rgukt:~$ cd Desktop
+user@rgukt:~/Desktop$ cd ~/security-log-analyzer
+bash: cd: /home/user/security-log-analyzer: No such file or directory
+user@rgukt:~/Desktop$ cd security-log-analyzer
+user@rgukt:~/Desktop/security-log-analyzer$ find "*.log"
+find: ‘*.log’: No such file or directory
+user@rgukt:~/Desktop/security-log-analyzer$ find -name ".log"
+user@rgukt:~/Desktop/security-log-analyzer$ find -name ".log"
+user@rgukt:~/Desktop/security-log-analyzer$ find -name "*.log"
+./access.log
+./server.log
+./auth.log
+user@rgukt:~/Desktop/security-log-analyzer$ grep "login failed" auth.log
+Feb 1 login failed user yamuna from 192.168.1.10
+Feb 1 login failed user teja from 192.168.1.11
+Feb 1 login failed user yamuna from 192.168.1.10
+Feb 1 login failed user root from 10.0.0.2
+Feb 1 login failed user teja from 192.168.1.11
+user@rgukt:~/Desktop/security-log-analyzer$ touch failed-logins.txt
+user@rgukt:~/Desktop/security-log-analyzer$ grep "login failed" auth.log >> failed-logins.txt
+user@rgukt:~/Desktop/security-log-analyzer$ nano failed-logins.txt
+user@rgukt:~/Desktop/security-log-analyzer$ sort failed-logins.txt | uniq -c 
+      1 Feb 1 login failed user root from 10.0.0.2
+      2 Feb 1 login failed user teja from 192.168.1.11
+      2 Feb 1 login failed user yamuna from 192.168.1.10
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "[0-9.]\+" failed-logins.txt
+1
+192.168.1.10
+1
+192.168.1.11
+1
+192.168.1.10
+1
+10.0.0.2
+1
+192.168.1.11
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "[0-9.]\+" failed-logins.txt | sort | uniq
+1
+10.0.0.2
+192.168.1.10
+192.168.1.11
+user@rgukt:~/Desktop/security-log-analyzer$ grep "[0-9.]\+" failed-logins.txt | sort|uniq -c
+      1 Feb 1 login failed user root from 10.0.0.2
+      2 Feb 1 login failed user teja from 192.168.1.11
+      2 Feb 1 login failed user yamuna from 192.168.1.10
+user@rgukt:~/Desktop/security-log-analyzer$ grep "[0-9.]\+" failed-logins.txt | sort -r | uniq -c 
+      2 Feb 1 login failed user yamuna from 192.168.1.10
+      2 Feb 1 login failed user teja from 192.168.1.11
+      1 Feb 1 login failed user root from 10.0.0.2
+user@rgukt:~/Desktop/security-log-analyzer$ grep "[0-9.]\+" failed-logins.txt | sort | uniq -c | sort -nr
+      2 Feb 1 login failed user yamuna from 192.168.1.10
+      2 Feb 1 login failed user teja from 192.168.1.11
+      1 Feb 1 login failed user root from 10.0.0.2
+user@rgukt:~/Desktop/security-log-analyzer$ grep "user ." |uniq 
+^C
+user@rgukt:~/Desktop/security-log-analyzer$ grep "user ." failed-logins.txt | uniq 
+Feb 1 login failed user yamuna from 192.168.1.10
+Feb 1 login failed user teja from 192.168.1.11
+Feb 1 login failed user yamuna from 192.168.1.10
+Feb 1 login failed user root from 10.0.0.2
+Feb 1 login failed user teja from 192.168.1.11
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user." failed-logins.txt | uniq 
+user 
+user@rgukt:~/Desktop/security-log-analyzer$ grep "failed" failed-logins.txt | grep "user [a-zA-Z0-9]" failed-logins.txt |sort | uniq
+Feb 1 login failed user root from 10.0.0.2
+Feb 1 login failed user teja from 192.168.1.11
+Feb 1 login failed user yamuna from 192.168.1.10
+user@rgukt:~/Desktop/security-log-analyzer$ grep "user [a-zA-Z0-9]" failed-logins.txt | sort | uniq
+Feb 1 login failed user root from 10.0.0.2
+Feb 1 login failed user teja from 192.168.1.11
+Feb 1 login failed user yamuna from 192.168.1.10
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user [a-zA-Z0-9]" failed-logins.txt | sort | uniq
+user r
+user t
+user y
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user [a-zA-Z0-9.]\+" failed-logins.txt | sort | uniq
+user root
+user teja
+user yamuna
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user [a-zA-Z0-9.]\+" failed-logins.txt | sort | uniq -c
+      1 user root
+      2 user teja
+      2 user yamuna
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user [a-zA-Z0-9.]\+" failed-logins.txt | sort-r | uniq -c
+Command 'sort-r' not found, did you mean:
+  command 'sorter' from deb sleuthkit (4.11.1+dfsg-1)
+Try: sudo apt install <deb name>
+user@rgukt:~/Desktop/security-log-analyzer$ grep -o "user [a-zA-Z0-9.]\+" failed-logins.txt | sort -r | uniq -c
+      2 user yamuna
+      2 user teja
+      1 user root
+user@rgukt:~/Desktop/security-log-analyzer$ grep "ERROR" server.log >> touch system-errors.txt 
+grep: system-errors.txt: No such file or directory
+user@rgukt:~/Desktop/security-log-analyzer$ touch system-errors.txt
+user@rgukt:~/Desktop/security-log-analyzer$ grep "ERROR" server.log >> system-errors.txt
+user@rgukt:~/Desktop/security-log-analyzer$ grep "ERROR" server.log 
+ERROR disk full
+ERROR memory low
+user@rgukt:~/Desktop/security-log-analyzer$ nano system-errors.txt
+user@rgukt:~/Desktop/security-log-analyzer$ grep "error" system-errors.txt | uniq 
+user@rgukt:~/Desktop/security-log-analyzer$ nano system-errors.txt
+user@rgukt:~/Desktop/security-log-analyzer$ grep -i "error" system-errors.txt |uniq
+ERROR disk full
+ERROR memory low
+user@rgukt:~/Desktop/security-log-analyzer$ grep  "accessed" access.log | grep -o "[0-9.]\+" access.log | uniq
+192.168.1.10
+192.168.1.11
+10.0.0.2
+192.168.1.10
+172.16.0.3
+user@rgukt:~/Desktop/security-log-analyzer$ grep  "accessed" access.log 
+user@rgukt:~/Desktop/security-log-analyzer$ grep "accessed" access.log 
+user@rgukt:~/Desktop/security-log-analyzer$ nano access.log
+user@rgukt:~/Desktop/security-log-analyzer$ grep "/login" access.log | grep -o "[0-9.]\+" access.log | uniq
+192.168.1.10
+192.168.1.11
+10.0.0.2
+192.168.1.10
+172.16.0.3
+user@rgukt:~/Desktop/security-log-analyzer$ grep -i "/login" access.log 
+192.168.1.10 - - "GET /login"
+192.168.1.11 - - "POST /login"
+192.168.1.10 - - "POST /login"
+user@rgukt:~/Desktop/security-log-analyzer$ grep -i "/login" access.log | grep -o "[0-9.]\+" access.log | uniq 
+192.168.1.10
+192.168.1.11
+10.0.0.2
+192.168.1.10
+172.16.0.3
+user@rgukt:~/Desktop/security-log-analyzer$ 
+
